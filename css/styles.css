@@ -5,6 +5,7 @@
 }
 
 body {
+  background-color: #c2b2b4;
   font-family: 'Open Sans', sans-serif;
   font-weight: 600;
 }
@@ -76,8 +77,22 @@ form input {
   margin: 5px 0 15px;
 }
 
-form .choose-file {
+form .choose-file-label {
+  display: block;
+  font-size: 1rem;
+  font-weight: 400;
+  padding-top: 7px;
   margin: 21px 0 36px;
+  text-align: center;
+}
+
+form #choose-file {
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
 }
 
 form .button,
@@ -98,7 +113,6 @@ form .small-button {
 }
 
 .photo-area {
-  background-color: #c2b2b4;
   color: #3e2a35;
   display: grid;
   grid-gap: 30px;
@@ -108,12 +122,45 @@ form .small-button {
 }
 
 .photo-card {
-  border: 1px solid #5b4447;
-  max-width: 480px;
+  border: 2px solid #938284;
+  display: grid;
+  grid-template-rows: 38px 1fr 76px 45px;
+  max-width: 670px;
 }
 
-.svg {
+.photo-title,
+.photo-caption {
+  background-color: #fff;
+  padding: 10px;
+}
+
+.photo-container-0 {
+  background-image: url("https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Salto_del_Angel-Canaima-Venezuela08.JPG/1280px-Salto_del_Angel-Canaima-Venezuela08.JPG");
+  background-position: center;
+  background-size: cover;
+  padding-top: 75%;
+}
+
+.photo-container-1 {
+  background-image: url("https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Lauterbrunnen_-_Staubbachfall.jpg/2560px-Lauterbrunnen_-_Staubbachfall.jpg");
+  background-position: center;
+  background-size: cover;
+  padding-top: 75%;
+}
+
+.photo-card-footer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  height: 45px;
+}
+
+.photo-card-footer .favorite {
+  justify-self: right;
+}
+
+.photo-card-footer .svg {
   height: 25px;
+  margin: 10px;
 }
 
 
@@ -150,7 +197,7 @@ form .small-button {
 
   .photo-area {
     grid-template-columns: 1fr;
-    padding: 15px;
+    padding: 30px 15px;
   }
 }
 
