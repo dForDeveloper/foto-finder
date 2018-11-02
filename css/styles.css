@@ -1,0 +1,165 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding:0;
+}
+
+body {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 600;
+}
+
+body .dark-background {
+  background-color: #3e2a35;
+}
+
+header {
+  align-items: center;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  padding: 30px;
+}
+
+header h1 {
+  color: #fff;
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin: 0;
+}
+
+header h1 .svg {
+  height: 2.2rem;
+}
+
+header .search-input-plus-button {
+  justify-self: right;
+}
+
+header #search {
+  border: 2px solid #c2b2b4;
+  border-radius: 3px 0 0 3px;
+  font-size: 1rem;
+  height: 1.875rem;
+  padding-left: 5px;
+}
+
+header .search-button {
+  background-color: #c2b2b4;
+  border: 2px solid #c2b2b4;
+  border-radius: 0 3px 3px 0;
+  color: #fff;
+  height: 1.875rem;
+  line-height: 1.1;
+  margin-left: -5px;
+  padding-right: 2px;
+  width: 1.875rem;
+}
+
+form {
+  margin: auto;
+  padding: 15px 30px 30px;
+  width: 720px;
+}
+
+form .full-width {
+  width: 100%;
+}
+
+form label {
+  color: #968183;
+  font-size: .9rem;
+}
+
+form input {
+  border: 0;
+  height: 2rem;
+  margin: 5px 0 15px;
+}
+
+form .choose-file {
+  margin: 21px 0 36px;
+}
+
+form .button,
+.photo-card-footer {
+  background-color: #5b4447;
+  border: 0;
+  color: #fff;
+  height: 2rem;
+}
+
+form .fav-and-add {
+  display: flex;
+  justify-content: space-between;
+}
+
+form .small-button {
+  width: 45%;
+}
+
+.photo-area {
+  background-color: #c2b2b4;
+  color: #3e2a35;
+  display: grid;
+  grid-gap: 30px;
+  grid-template-columns: repeat(4, 1fr);
+  justify-content: center;
+  padding: 30px;
+}
+
+.photo-card {
+  border: 1px solid #5b4447;
+  max-width: 480px;
+}
+
+.svg {
+  height: 25px;
+}
+
+
+@media screen and (max-width: 1350px){
+  .photo-area {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media screen and (max-width: 1020px){
+  .photo-area {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (max-width: 700px) {
+  header {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr;
+    justify-items: center;
+    padding: 15px;
+  }
+
+  header .search-input-plus-button {
+    justify-self: center;
+    margin: auto;
+  }
+
+  form {
+    margin: auto;
+    padding: 30px 15px;
+    width: 100%;
+  }
+
+  .photo-area {
+    grid-template-columns: 1fr;
+    padding: 15px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  header h1 {
+    font-size: 2rem;
+  }
+
+  header h1 .svg {
+  height: 1.8rem;
+  }
+}

@@ -14,40 +14,83 @@
       crossorigin="anonymous">
   </head>
   <body>
-    <header>
+    <header class="dark-background">
       <h1>
         FOTO
-        <img src="images/foto-finder-logo.svg" alt="foto-finder-logo">
+        <img src="images/foto-finder-logo.svg" alt="Foto Finder logo"
+          class="svg">
         FINDER
       </h1>
-      <input type="text" name="search" id="search" placeholder="Search">
-      <button class="search-button"><i class="fas fa-search"></i></button>
+      <div class="search-input-plus-button">
+        <input type="text" name="search" id="search" placeholder="Search">
+        <button class="search-button"><i class="fas fa-search"></i></button>
+      </div>
     </header>
-    <main>
+    <main class="dark-background">
       <form>
         <label id="caption">Title</label>
-        <input type="text" name="title" id="title">
+        <input type="text" name="title" id="title" class="full-width">
         <label for="caption">Caption</label>
-        <input type="text" name="caption" id="caption">
-        <input type="submit" name="choose-file" class="choose-file button"
-          value="Choose File">
-        <button class="favorites button">
-          View <span class="num-favs"></span> Favorites
-        </button>
-        <button class="add-to-album button">Add To Album</button>
+        <input type="text" name="caption" id="caption" class="full-width">
+        <input type="submit" name="choose-file" value="Choose File"
+          class="choose-file button full-width">
+        <div class="fav-and-add">
+          <button class="favorites button small-button">
+            View <span class="num-favs"></span> Favorites
+          </button>
+          <button class="add-to-album button small-button">
+            Add To Album
+          </button>
+        </div>
       </form>
-      <section class="photo-area">
-        <article class="photo-card">
-          <h4 class="photo-title">Photo Title</h4>
-          <img src="#" class="photo-image" alt="">
-          <p class="photo-caption">Photo Caption</p>
-          <footer class="photo-card-footer">
-            <img src="images/delete.svg">
-            <img src="images/favorite.svg">
-          </footer>
-        </article>
-      </section>
     </main>
+    <section class="photo-area">
+      <article class="photo-card">
+        <h4 class="photo-title">Photo Title</h4>
+        <img src="#" class="photo-image" alt="">
+        <p class="photo-caption">Photo Caption</p>
+        <footer class="photo-card-footer">
+          <img src="images/delete.svg" alt="delete button" class="svg">
+          <img src="images/favorite.svg" alt="favorite button" class="svg">
+        </footer>
+      </article>
+      <article class="photo-card">
+        <h4 class="photo-title">Photo Title</h4>
+        <img src="#" class="photo-image" alt="">
+        <p class="photo-caption">Photo Caption</p>
+        <footer class="photo-card-footer">
+          <img src="images/delete.svg" alt="delete button" class="svg">
+          <img src="images/favorite.svg" alt="favorite button" class="svg">
+        </footer>
+      </article>
+      <article class="photo-card">
+        <h4 class="photo-title">Photo Title</h4>
+        <img src="#" class="photo-image" alt="">
+        <p class="photo-caption">Photo Caption</p>
+        <footer class="photo-card-footer">
+          <img src="images/delete.svg" alt="delete button" class="svg">
+          <img src="images/favorite.svg" alt="favorite button" class="svg">
+        </footer>
+      </article>
+      <article class="photo-card">
+        <h4 class="photo-title">Photo Title</h4>
+        <img src="#" class="photo-image" alt="">
+        <p class="photo-caption">Photo Caption</p>
+        <footer class="photo-card-footer">
+          <img src="images/delete.svg" alt="delete button" class="svg">
+          <img src="images/favorite.svg" alt="favorite button" class="svg">
+        </footer>
+      </article>
+      <article class="photo-card">
+        <h4 class="photo-title">Photo Title</h4>
+        <img src="#" class="photo-image" alt="">
+        <p class="photo-caption">Photo Caption</p>
+        <footer class="photo-card-footer">
+          <img src="images/delete.svg" alt="delete button" class="svg">
+          <img src="images/favorite.svg" alt="favorite button" class="svg">
+        </footer>
+      </article>
+    </section>
     <script type="text/javascript" src="js/photo.js"></script>
     <script type="text/javascript" src="js/main.js"></script>
   </body>
