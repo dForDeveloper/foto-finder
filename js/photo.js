@@ -22,4 +22,9 @@ class Photo {
   updatePhoto() {
 
   }
+
+  updateFavorite(photosArray, isFavorite) {
+    this.favorite = isFavorite;
+    this.saveToStorage(photosArray);
+  }
 }

@@ -27,6 +27,9 @@ get('.photo-area').addEventListener('click', (event) => {
   if (event.target.classList.contains('delete-button')) {
     deletePhotoCard(event);
   }
+  if (event.target.classList.contains('favorite-button')) {
+    favoritePhotoCard(event);
+    }
 });
 
 function getNextID() {
@@ -46,7 +49,7 @@ function addToDOM(photo) {
     <p class="photo-caption">${photo.caption}</p>
     <footer class="photo-card-footer">
       <button class="delete-button"></button>
-      <button class="favorite-${photo.favorite}"></button>
+      <button class="favorite-button favorite-${photo.favorite}"></button>
     </footer>`;
   get('.photo-area').prepend(newCard);
   get(`.photo-image-${photo.id}`).style.backgroundImage = `url(${photo.file})`;
@@ -67,6 +70,16 @@ function deletePhotoCard(event) {
   const index = getIndex(id);
   photosArray[index].deleteFromStorage(photosArray, index);
   event.target.closest('.photo-card').remove();
+}
+
+function favoritePhotoCard(event) {
+  const id = parseInt(event.target.closest('.photo-card').dataset.id);
+  const index = getIndex(id);
+  const newFavStatus = !photosArray[index].favorite;
+  photosArray[index].updateFavorite(photosArray, newFavStatus);
+  event.target.classList.replace(`favorite-${!newFavStatus}`,
+    `favorite-${newFavStatus}`);
+  event.target.blur();
 }
 
 function getIndex(id) {
