@@ -7,8 +7,11 @@ class Photo {
     this.favorite = favorite || false;
   }
 
-  saveToStorage() {
-
+  saveToStorage(photosArray, isNewPhoto) {
+    if (isNewPhoto) {
+      photosArray.push(this);
+    }
+    localStorage.setItem('photos', JSON.stringify(photosArray));
   }
 
   deleteFromStorage() {
