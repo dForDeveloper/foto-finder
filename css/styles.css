@@ -77,6 +77,14 @@ form input {
   margin: 5px 0 15px;
 }
 
+form .button,
+.photo-card-footer {
+  background-color: #5b4447;
+  border: 0;
+  color: #fff;
+  height: 2rem;
+}
+
 form .choose-file-label {
   display: block;
   font-size: 1rem;
@@ -86,6 +94,10 @@ form .choose-file-label {
   text-align: center;
 }
 
+form .button:hover {
+  filter: brightness(1.2);
+}
+
 form #choose-file {
   width: 0.1px;
   height: 0.1px;
@@ -93,14 +105,6 @@ form #choose-file {
   overflow: hidden;
   position: absolute;
   z-index: -1;
-}
-
-form .button,
-.photo-card-footer {
-  background-color: #5b4447;
-  border: 0;
-  color: #fff;
-  height: 2rem;
 }
 
 form .fav-and-add {
@@ -154,15 +158,32 @@ form .small-button {
   height: 45px;
 }
 
-.photo-card-footer .favorite {
+.photo-card-footer button {
+  background-color: #5b4447;
+  border: 0;
+  height: 25px;
+  margin: 10px;
+  width: 25px;
+}
+
+.photo-card-footer .delete-button {
+  background-image: url(../images/delete.svg);
+  background-repeat: no-repeat;
+}
+
+.photo-card-footer .delete-button:hover {
+  background-image: url(../images/delete-active.svg);
+}
+
+.photo-card-footer .favorite-button {
+  background-image: url(../images/favorite.svg);
+  background-repeat: no-repeat;
   justify-self: right;
 }
 
-.photo-card-footer .svg {
-  height: 25px;
-  margin: 10px;
+.photo-card-footer .favorite-button:hover {
+  background-image: url(../images/favorite-active.svg);
 }
-
 
 @media screen and (max-width: 1350px){
   .photo-area {
