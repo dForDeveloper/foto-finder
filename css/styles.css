@@ -176,26 +176,22 @@ form .small-button {
   background-image: url(../images/delete-active.svg);
 }
 
+.photo-card-footer .favorite-button:hover {
+  height: 27px;
+  width: 27px;
+  margin: 9px;
+}
+
 .photo-card-footer .favorite-false {
   background-image: url(../images/favorite.svg);
   background-repeat: no-repeat;
   justify-self: right;
 }
 
-.photo-card-footer .favorite-false:hover {
-  background-image: url(../images/favorite-active.svg);
-}
-
 .photo-card-footer .favorite-true {
   background-image: url(../images/favorite-active.svg);
   background-repeat: no-repeat;
   justify-self: right;
-}
-
-.photo-card-footer .favorite-true:hover {
-  height: 27px;
-  width: 27px;
-  padding: 8px;
 }
 
 @media screen and (max-width: 1350px){
