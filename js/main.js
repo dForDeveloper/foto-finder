@@ -23,6 +23,12 @@ get('.add-to-album').addEventListener('click', (event) => {
   // elem.style.backgroundImage = `url(${url})`;
 });
 
+get('.photo-area').addEventListener('click', (event) => {
+  if (event.target.classList.contains('delete-button')) {
+    deletePhotoCard(event);
+  }
+});
+
 function getNextID() {
   if (photosArray[0] !== undefined) {
     return photosArray[photosArray.length - 1].id + 1;
@@ -54,4 +60,15 @@ function loadLocalStorage() {
   });
   // showTen();
   photosArray.forEach(photo => addToDOM(photo));
+}
+
+function deletePhotoCard(event) {
+  const id = parseInt(event.target.closest('.photo-card').dataset.id);
+  const index = getIndex(id);
+  photosArray[index].deleteFromStorage(photosArray, index);
+  event.target.closest('.photo-card').remove();
+}
+
+function getIndex(id) {
+  return photosArray.findIndex(photo => photo.id === id);
 }
