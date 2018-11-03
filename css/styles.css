@@ -136,16 +136,17 @@ form .small-button {
 .photo-caption {
   background-color: #fff;
   padding: 10px;
+  word-break: break-all;
 }
 
-.photo-container-0 {
-  background-image: url("https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Salto_del_Angel-Canaima-Venezuela08.JPG/1280px-Salto_del_Angel-Canaima-Venezuela08.JPG");
+.photo-container {
   background-position: center;
+  background-repeat: no-repeat;
   background-size: cover;
   padding-top: 75%;
 }
 
-.photo-container-1 {
+.photo-container-0 {
   background-image: url("https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Lauterbrunnen_-_Staubbachfall.jpg/2560px-Lauterbrunnen_-_Staubbachfall.jpg");
   background-position: center;
   background-size: cover;
@@ -175,14 +176,26 @@ form .small-button {
   background-image: url(../images/delete-active.svg);
 }
 
-.photo-card-footer .favorite-button {
+.photo-card-footer .favorite-false {
   background-image: url(../images/favorite.svg);
   background-repeat: no-repeat;
   justify-self: right;
 }
 
-.photo-card-footer .favorite-button:hover {
+.photo-card-footer .favorite-false:hover {
   background-image: url(../images/favorite-active.svg);
+}
+
+.photo-card-footer .favorite-true {
+  background-image: url(../images/favorite-active.svg);
+  background-repeat: no-repeat;
+  justify-self: right;
+}
+
+.photo-card-footer .favorite-true:hover {
+  height: 27px;
+  width: 27px;
+  padding: 8px;
 }
 
 @media screen and (max-width: 1350px){
