@@ -81,17 +81,17 @@ form .choose-file-label {
   display: block;
   font-size: 1rem;
   font-weight: 400;
-  padding-top: 7px;
   margin: 21px 0 36px;
+  padding-top: 7px;
   text-align: center;
 }
 
 form #choose-file {
-  width: 0.1px;
   height: 0.1px;
   opacity: 0;
   overflow: hidden;
   position: absolute;
+  width: 0.1px;
   z-index: -1;
 }
 
@@ -181,17 +181,22 @@ form .small-button {
     grid-template-columns: 1fr;
     grid-template-rows: 1fr 1fr;
     justify-items: center;
-    padding: 15px;
+    padding: 7px 15px;
   }
 
   header .search-input-plus-button {
     justify-self: center;
     margin: auto;
+    width: 330px;
   }
 
-  form {
+  header #search {
+    width: 91%;
+  }
+
+  main form {
     margin: auto;
-    padding: 30px 15px;
+    padding: 15px 15px 30px;
     width: 100%;
   }
 
@@ -202,11 +207,30 @@ form .small-button {
 }
 
 @media screen and (max-width: 480px) {
+  header {
+    padding: 14px 15px;
+  }
+
   header h1 {
-    font-size: 2rem;
+    font-size: 2.15rem;
   }
 
   header h1 .svg {
-  height: 1.8rem;
+    height: 1.9rem;
+  }
+
+  header .search-input-plus-button {
+    justify-self: center;
+    margin: auto;
+    width: 285px;
+  }
+
+  header #search {
+    width: 89%;
+  }
+
+  form .choose-file-label,
+  form button {
+    font-size: .9rem;
   }
 }
