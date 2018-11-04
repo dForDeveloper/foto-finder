@@ -19,8 +19,10 @@ class Photo {
     this.saveToStorage(photosArray);
   }
 
-  updatePhoto() {
-
+  updatePhoto(photosArray, index, title, caption) {
+    photosArray[index].title = title;
+    photosArray[index].caption = caption;
+    this.saveToStorage(photosArray);
   }
 
   updateFavorite(photosArray, isFavorite) {
