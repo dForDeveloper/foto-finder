@@ -10,10 +10,6 @@ function generateCards() {
   testPhoto.saveToStorage(photosArray);
 }
 
-function get(elem) {
-  return document.querySelector(elem);
-}
-
 window.onload = () => {
   if (localStorage.getItem('photos') !== null) {
     loadLocalStorage();
@@ -21,14 +17,16 @@ window.onload = () => {
   get('.add-to-album').disabled = true;
 }
 
-get('.more-less-container').addEventListener('click', (event) => {
+get('.add-to-album').addEventListener('click', (event) => {
   event.preventDefault();
-  const viewedArray = determineViewedArray();
-  if (event.target.classList.contains('more-button')) {
-    showMore(event, viewedArray);
-  } else if (event.target.classList.contains('less-button')) {
-    showTen(viewedArray);
-  }
+  const id = getNextID();
+  const title = get('#title').value;
+  const caption = get('#caption').value;
+  const file = URL.createObjectURL(get('#choose-file').files[0]);
+  const photo = new Photo(id, title, caption, file);
+  photo.saveToStorage(photosArray, true);
+  clearInput();
+  addToDOM(photo);
 });
 
 get('.fav-and-add').addEventListener('click', (event) => {
@@ -45,16 +43,14 @@ get('.fav-and-add').addEventListener('click', (event) => {
 
 get('form').addEventListener('change', checkForm);
 
-get('.add-to-album').addEventListener('click', (event) => {
+get('.more-less-container').addEventListener('click', (event) => {
   event.preventDefault();
-  const id = getNextID();
-  const title = get('#title').value;
-  const caption = get('#caption').value;
-  const file = URL.createObjectURL(get('#choose-file').files[0]);
-  const photo = new Photo(id, title, caption, file);
-  photo.saveToStorage(photosArray, true);
-  clearInput();
-  addToDOM(photo);
+  const viewedArray = determineViewedArray();
+  if (event.target.classList.contains('more-button')) {
+    showMore(event, viewedArray);
+  } else if (event.target.classList.contains('less-button')) {
+    showTen(viewedArray);
+  }
 });
 
 get('.photo-area').addEventListener('click', (event) => {
@@ -76,20 +72,20 @@ get('.photo-area').addEventListener('keydown', (event) => {
   }
 });
 
-function determineViewedArray() {
-  if (get('.favorites') === null) {
-    return photosArray.filter(photo => photo.favorite === true);
-  }
-  return photosArray;
-}
-  
-
-function showFavorites(event) {
-  removeCardsFromDOM();
-  const favorites = photosArray.filter(photo => photo.favorite === true);
-  showTen(favorites);
-  event.target.innerHTML = 'View All Photos';
-  event.target.classList.replace('favorites', 'view-all');
+function addToDOM(photo) {
+  const newCard = document.createElement('article');
+  newCard.dataset.id = photo.id;
+  newCard.classList.add('photo-card');
+  newCard.innerHTML =
+   `<h4 class="photo-title" contenteditable="true">${photo.title}</h4>
+    <figure class="photo-image-${photo.id} photo-container"></figure>
+    <p class="photo-caption" contenteditable="true">${photo.caption}</p>
+    <footer class="photo-card-footer">
+      <button class="delete-button"></button>
+      <button class="favorite-button favorite-${photo.favorite}"></button>
+    </footer>`;
+  get('.photo-area').prepend(newCard);
+  get(`.photo-image-${photo.id}`).style.backgroundImage = `url(${photo.file})`;
 }
 
 function checkForm() {
@@ -108,36 +104,43 @@ function clearInput() {
   get('.add-to-album').disabled = true;
 }
 
-function saveEdits(event) {
+function deletePhotoCard(event) {
   const index = getIndex(event);
-  const id = photosArray[index].id;
-  const title = get(`.photo-card[data-id="${id}"] .photo-title`).innerText;
-  const caption = get(`.photo-card[data-id="${id}"] .photo-caption`).innerText;
-  photosArray[index].updatePhoto(photosArray, index, title, caption);
-  event.target.blur();
+  photosArray[index].deleteFromStorage(photosArray, index);
+  event.target.closest('.photo-card').remove();
 }
 
+function determineViewedArray() {
+  if (get('.favorites') === null) {
+    return photosArray.filter(photo => photo.favorite === true);
+  }
+  return photosArray;
+}
+
+function favoritePhotoCard(event) {
+  const index = getIndex(event);
+  const newFavStatus = !photosArray[index].favorite
+  photosArray[index].favorite = newFavStatus;
+  event.target.classList.replace(`favorite-${!newFavStatus}`,
+    `favorite-${newFavStatus}`);
+  updateFavoriteCounter(newFavStatus);
+  saveEdits(event);
+}
+
+function get(elem) {
+  return document.querySelector(elem);
+}
+
+function getIndex(event) {
+  const id = parseInt(event.target.closest('.photo-card').dataset.id);
+  return photosArray.findIndex(photo => photo.id === parseInt(id));
+}
+  
 function getNextID() {
   if (photosArray[0] !== undefined) {
     return photosArray[photosArray.length - 1].id + 1;
   }
   return 0;
-}
-
-function addToDOM(photo) {
-  const newCard = document.createElement('article');
-  newCard.dataset.id = photo.id;
-  newCard.classList.add('photo-card');
-  newCard.innerHTML =
-   `<h4 class="photo-title" contenteditable="true">${photo.title}</h4>
-    <figure class="photo-image-${photo.id} photo-container"></figure>
-    <p class="photo-caption" contenteditable="true">${photo.caption}</p>
-    <footer class="photo-card-footer">
-      <button class="delete-button"></button>
-      <button class="favorite-button favorite-${photo.favorite}"></button>
-    </footer>`;
-  get('.photo-area').prepend(newCard);
-  get(`.photo-image-${photo.id}`).style.backgroundImage = `url(${photo.file})`;
 }
 
 function loadLocalStorage() {
@@ -151,15 +154,6 @@ function loadLocalStorage() {
   showTen(photosArray);
 }
 
-function showTen(viewedArray) {
-  removeCardsFromDOM();
-  const tenMostRecent = viewedArray.filter((photo, index) => {
-    return index >= viewedArray.length - 10;
-  })
-  tenMostRecent.forEach(photo => addToDOM(photo));
-  makeShowMoreButton(viewedArray);
-}
-
 function makeShowMoreButton(viewedArray) {
   get('.more-less-container').innerHTML = '';
   if (viewedArray.length > 10) {
@@ -170,6 +164,27 @@ function makeShowMoreButton(viewedArray) {
   }
 }
 
+function removeCardsFromDOM() {
+  get('.photo-area').innerHTML = '';
+}
+
+function saveEdits(event) {
+  const index = getIndex(event);
+  const id = photosArray[index].id;
+  const title = get(`.photo-card[data-id="${id}"] .photo-title`).innerText;
+  const caption = get(`.photo-card[data-id="${id}"] .photo-caption`).innerText;
+  photosArray[index].updatePhoto(photosArray, index, title, caption);
+  event.target.blur();
+}
+
+function showFavorites(event) {
+  removeCardsFromDOM();
+  const favorites = photosArray.filter(photo => photo.favorite === true);
+  showTen(favorites);
+  event.target.innerHTML = 'View All Photos';
+  event.target.classList.replace('favorites', 'view-all');
+}
+
 function showMore(event, viewedArray) {
   removeCardsFromDOM();
   viewedArray.forEach(photo => addToDOM(photo));
@@ -177,8 +192,13 @@ function showMore(event, viewedArray) {
   event.target.classList.replace('more-button', 'less-button');
 }
 
-function removeCardsFromDOM() {
-  get('.photo-area').innerHTML = '';
+function showTen(viewedArray) {
+  removeCardsFromDOM();
+  const tenMostRecent = viewedArray.filter((photo, index) => {
+    return index >= viewedArray.length - 10;
+  })
+  tenMostRecent.forEach(photo => addToDOM(photo));
+  makeShowMoreButton(viewedArray);
 }
 
 function updateFavoriteCounter(isIncrement) {
@@ -190,25 +210,4 @@ function updateFavoriteCounter(isIncrement) {
   if (get('.num-favs') !== null) {
     get('.num-favs').innerText = favCount;
   }
-}
-
-function deletePhotoCard(event) {
-  const index = getIndex(event);
-  photosArray[index].deleteFromStorage(photosArray, index);
-  event.target.closest('.photo-card').remove();
-}
-
-function favoritePhotoCard(event) {
-  const index = getIndex(event);
-  const newFavStatus = !photosArray[index].favorite
-  photosArray[index].favorite = newFavStatus;
-  event.target.classList.replace(`favorite-${!newFavStatus}`,
-    `favorite-${newFavStatus}`);
-  updateFavoriteCounter(newFavStatus);
-  saveEdits(event);
-}
-
-function getIndex(event) {
-  const id = parseInt(event.target.closest('.photo-card').dataset.id);
-  return photosArray.findIndex(photo => photo.id === parseInt(id));
 }
