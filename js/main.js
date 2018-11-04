@@ -1,5 +1,14 @@
 let photosArray = [];
 
+function generateCards() {
+  for (var i = 0; i < 30; i++) {
+    var testPhoto = new Photo(i, `Title ${i}`, `Caption ${i}`,
+      'https://proxy.duckduckgo.com/iu/?u=http%3A%2F%2Ffc00.deviantart.net%2Ffs70%2Ff%2F2011%2F003%2F4%2Fc%2F4_bit_grayscale_palette_by_10binary-d36dso3.png&f=1', i % 2 === 0);
+    photosArray.push(testPhoto);
+  }
+  testPhoto.saveToStorage(photosArray);
+}
+
 function get(elem) {
   return document.querySelector(elem);
 }
@@ -10,6 +19,13 @@ window.onload = () => {
   }
   get('.add-to-album').disabled = true;
 }
+
+get('.more-less-container').addEventListener('click', (event) => {
+  event.preventDefault();
+  if (event.target.classList.contains('more-button')) {
+    showMore();
+  }
+});
 
 get('form').addEventListener('change', checkForm);
 
@@ -100,7 +116,36 @@ function loadLocalStorage() {
     return photo = new Photo(photo.id, photo.title, photo.caption, photo.file,
       photo.favorite);
   });
-  // showTen();
+  showTenCards();
+}
+
+function showTenCards() {
+  removeCardsFromDOM();
+  const tenMostRecent = photosArray.filter((photo, index) => {
+    return index >= photosArray.length - 10;
+  })
+  tenMostRecent.forEach(photo => addToDOM(photo));
+  makeShowMoreButton(photosArray);
+}
+
+function makeShowMoreButton(viewedArray) {
+  if (viewedArray.length > 10) {
+    const button = document.createElement('button');
+    button.classList.add('more-button');
+    button.innerText = 'Show More';
+    get('.more-less-container').append(button);
+  }
+}
+
+function showMore() {
+  removeCardsFromDOM();
+  photosArray.forEach(photo => addToDOM(photo));
+  get('.more-button').classList.replace('more-button', 'less-button');
+  get('.less-button').innerText = 'Show Less';
+}
+
+function removeCardsFromDOM() {
+  get('.photo-area').innerHTML = '';
 }
 
 function updateFavoriteCounter(isIncrement) {
