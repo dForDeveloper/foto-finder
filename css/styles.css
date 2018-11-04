@@ -116,6 +116,10 @@ form .small-button {
   width: 45%;
 }
 
+form .add-to-album:disabled {
+  filter: grayscale(1);
+}
+
 .photo-area {
   color: #3e2a35;
   display: grid;

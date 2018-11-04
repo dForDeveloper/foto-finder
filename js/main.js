@@ -8,7 +8,10 @@ window.onload = () => {
   if (localStorage.getItem('photos') !== null) {
     loadLocalStorage();
   }
+  get('.add-to-album').disabled = true;
 }
+
+get('form').addEventListener('change', checkForm);
 
 get('.add-to-album').addEventListener('click', (event) => {
   event.preventDefault();
@@ -18,6 +21,7 @@ get('.add-to-album').addEventListener('click', (event) => {
   const file = URL.createObjectURL(get('#choose-file').files[0]);
   const photo = new Photo(id, title, caption, file);
   photo.saveToStorage(photosArray, true);
+  clearInput();
   addToDOM(photo);
 });
 
@@ -38,7 +42,23 @@ get('.photo-area').addEventListener('keydown', (event) => {
     event.target.closest('.photo-card') !== null) {
     saveEdits(event);
   }
-})
+});
+
+function checkForm() {
+  if (get('#title').value !== '' && get('#caption').value !== '' &&
+    get('#choose-file').files.length > 0) {
+    get('.add-to-album').disabled = false;
+  } else {
+    get('.add-to-album').disabled = true;
+  }
+}
+
+function clearInput() {
+  get('#title').value = '';
+  get('#caption').value = '';
+  get('#choose-file').value = '';
+  get('.add-to-album').disabled = true;
+}
 
 function saveEdits(event) {
   const index = getIndex(event);
