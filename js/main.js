@@ -19,11 +19,12 @@ get('.add-to-album').addEventListener('click', (event) => {
   const photo = new Photo(id, title, caption, file);
   photo.saveToStorage(photosArray, true);
   addToDOM(photo);
-  // let elem = get('.photo-container-0');
-  // elem.style.backgroundImage = `url(${url})`;
 });
 
 get('.photo-area').addEventListener('click', (event) => {
+  if (event.target.closest('.photo-card') !== null) {
+    event.target.onblur = event => saveEdits(event);
+  }
   if (event.target.classList.contains('delete-button')) {
     deletePhotoCard(event);
   }
@@ -31,6 +32,22 @@ get('.photo-area').addEventListener('click', (event) => {
     favoritePhotoCard(event);
     }
 });
+
+get('.photo-area').addEventListener('keydown', (event) => {
+  if(event.key === 'Enter' || event.key === 'Tab' &&
+    event.target.closest('.photo-card') !== null) {
+    saveEdits(event);
+  }
+})
+
+function saveEdits(event) {
+  const id = event.target.closest('.photo-card').dataset.id;
+  const index = getIndex(id);
+  const title = get(`.photo-card[data-id="${id}"] .photo-title`).innerText;
+  const caption = get(`.photo-card[data-id="${id}"] .photo-caption`).innerText;
+  photosArray[index].updatePhoto(photosArray, index, title, caption);
+  event.target.blur();
+}
 
 function getNextID() {
   if (photosArray[0] !== undefined) {
@@ -44,9 +61,9 @@ function addToDOM(photo) {
   newCard.dataset.id = photo.id;
   newCard.classList.add('photo-card');
   newCard.innerHTML =
-   `<h4 class="photo-title">${photo.title}</h4>
+   `<h4 class="photo-title" contenteditable="true">${photo.title}</h4>
     <figure class="photo-image-${photo.id} photo-container"></figure>
-    <p class="photo-caption">${photo.caption}</p>
+    <p class="photo-caption" contenteditable="true">${photo.caption}</p>
     <footer class="photo-card-footer">
       <button class="delete-button"></button>
       <button class="favorite-button favorite-${photo.favorite}"></button>
@@ -73,7 +90,7 @@ function deletePhotoCard(event) {
 }
 
 function favoritePhotoCard(event) {
-  const id = parseInt(event.target.closest('.photo-card').dataset.id);
+  const id = event.target.closest('.photo-card').dataset.id;
   const index = getIndex(id);
   const newFavStatus = !photosArray[index].favorite;
   photosArray[index].updateFavorite(photosArray, newFavStatus);
@@ -83,5 +100,5 @@ function favoritePhotoCard(event) {
 }
 
 function getIndex(id) {
-  return photosArray.findIndex(photo => photo.id === id);
+  return photosArray.findIndex(photo => photo.id === parseInt(id));
 }
