@@ -94,12 +94,23 @@ function addToDOM(photo) {
 
 function loadLocalStorage() {
   photosArray = JSON.parse(localStorage.getItem('photos'));
+  photosArray.forEach(photo => addToDOM(photo));
   photosArray = photosArray.map(photo => {
+    photo.favorite && updateFavoriteCounter(true);
     return photo = new Photo(photo.id, photo.title, photo.caption, photo.file,
       photo.favorite);
   });
   // showTen();
-  photosArray.forEach(photo => addToDOM(photo));
+}
+
+function updateFavoriteCounter(isIncrement) {
+  let numFavs = parseInt(get('.num-favs').innerText);
+  if (isIncrement) {
+    numFavs++;
+  } else {
+    numFavs--;
+  }
+  get('.num-favs').innerText = numFavs;
 }
 
 function deletePhotoCard(event) {
@@ -114,6 +125,7 @@ function favoritePhotoCard(event) {
   photosArray[index].favorite = newFavStatus;
   event.target.classList.replace(`favorite-${!newFavStatus}`,
     `favorite-${newFavStatus}`);
+  updateFavoriteCounter(newFavStatus);
   saveEdits(event);
 }
 
