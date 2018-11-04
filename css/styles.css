@@ -142,21 +142,19 @@ form .add-to-album:disabled {
 .photo-caption {
   background-color: #fff;
   padding: 10px;
-  word-break: break-all;
+  word-break: break-word;
 }
 
 .photo-container {
+  background-color: #ffffff;
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
   padding-top: 75%;
 }
 
-.photo-container-0 {
-  background-image: url("https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Lauterbrunnen_-_Staubbachfall.jpg/2560px-Lauterbrunnen_-_Staubbachfall.jpg");
-  background-position: center;
-  background-size: cover;
-  padding-top: 75%;
+.placeholder-image {
+  background-image: url(../images/foto-finder-logo.svg);
 }
 
 .photo-card-footer {
@@ -173,7 +171,8 @@ form .add-to-album:disabled {
   width: 25px;
 }
 
-.photo-card-footer .delete-button {
+.photo-card-footer .delete-button,
+.photo-card-footer .fake-delete {
   background-image: url(../images/delete.svg);
   background-repeat: no-repeat;
 }
@@ -188,7 +187,8 @@ form .add-to-album:disabled {
   margin: 9px;
 }
 
-.photo-card-footer .favorite-false {
+.photo-card-footer .favorite-false,
+.photo-card-footer .fake-favorite {
   background-image: url(../images/favorite.svg);
   background-repeat: no-repeat;
   justify-self: right;

@@ -11,21 +11,21 @@ function generateCards() {
 }
 
 window.onload = () => {
-  if (localStorage.getItem('photos') !== null) {
+  if (localStorage.getItem('photos') !== null &&
+      localStorage.getItem('photos') !== '[]') {
     loadLocalStorage();
+  } else {
+    giveIndicationToAddPhotos();
   }
   get('.add-to-album').disabled = true;
 }
 
 get('.add-to-album').addEventListener('click', (event) => {
   event.preventDefault();
-  const id = getNextID();
-  const title = get('#title').value;
-  const caption = get('#caption').value;
-  const file = URL.createObjectURL(get('#choose-file').files[0]);
-  const photo = new Photo(id, title, caption, file);
+  const photo = makeNewPhoto();
   photo.saveToStorage(photosArray, true);
   clearInput();
+  checkNumCardsDisplayed();
   addToDOM(photo);
 });
 
@@ -97,6 +97,15 @@ function checkForm() {
   }
 }
 
+function checkNumCardsDisplayed() {
+  if (document.querySelectorAll('.photo-card').length === 10) {
+    document.querySelectorAll('.photo-card')[9].remove();
+    makeShowMoreButton(true);
+  } else if (get('.indication') !== null) {
+      get('.indication').remove();
+  }
+}
+
 function clearInput() {
   get('#title').value = '';
   get('#caption').value = '';
@@ -108,6 +117,9 @@ function deletePhotoCard(event) {
   const index = getIndex(event);
   photosArray[index].deleteFromStorage(photosArray, index);
   event.target.closest('.photo-card').remove();
+  if (photosArray.length === 0) {
+    giveIndicationToAddPhotos();
+  }
 }
 
 function determineViewedArray() {
@@ -143,6 +155,23 @@ function getNextID() {
   return 0;
 }
 
+function giveIndicationToAddPhotos() {
+  const newCard = document.createElement('article');
+  newCard.classList.add('indication');
+  newCard.classList.add('photo-card');
+  newCard.innerHTML =
+   `<h4 class="photo-title">Add Your Own Photos</h4>
+    <figure class="placeholder-image photo-container"></figure>
+    <p class="photo-caption">add your own photo to the album to remove this placeholder</p>
+    <footer class="photo-card-footer">
+      <button class="fake-delete"></button>
+      <button class="fake-favorite"></button>
+    </footer>`;
+  get('.photo-area').prepend(newCard);
+  get('.fake-delete').disabled = true;
+  get('.fake-favorite').disabled = true;
+}
+
 function loadLocalStorage() {
   photosArray = JSON.parse(localStorage.getItem('photos'));
   photosArray.forEach(photo => addToDOM(photo));
@@ -154,9 +183,17 @@ function loadLocalStorage() {
   showTen(photosArray);
 }
 
-function makeShowMoreButton(viewedArray) {
+function makeNewPhoto() {
+  const id = getNextID();
+  const title = get('#title').value;
+  const caption = get('#caption').value;
+  const file = URL.createObjectURL(get('#choose-file').files[0]);
+  return new Photo(id, title, caption, file);
+}
+
+function makeShowMoreButton(moreExist) {
   get('.more-less-container').innerHTML = '';
-  if (viewedArray.length > 10) {
+  if (moreExist) {
     const button = document.createElement('button');
     button.classList.add('more-button');
     button.innerText = 'Show More';
@@ -198,7 +235,7 @@ function showTen(viewedArray) {
     return index >= viewedArray.length - 10;
   })
   tenMostRecent.forEach(photo => addToDOM(photo));
-  makeShowMoreButton(viewedArray);
+  makeShowMoreButton(viewedArray.length > 10);
 }
 
 function updateFavoriteCounter(isIncrement) {
