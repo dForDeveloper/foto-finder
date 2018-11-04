@@ -24,6 +24,8 @@ get('.more-less-container').addEventListener('click', (event) => {
   event.preventDefault();
   if (event.target.classList.contains('more-button')) {
     showMore();
+  } else if (event.target.classList.contains('less-button')) {
+    showTen();
   }
 });
 
@@ -116,10 +118,10 @@ function loadLocalStorage() {
     return photo = new Photo(photo.id, photo.title, photo.caption, photo.file,
       photo.favorite);
   });
-  showTenCards();
+  showTen();
 }
 
-function showTenCards() {
+function showTen() {
   removeCardsFromDOM();
   const tenMostRecent = photosArray.filter((photo, index) => {
     return index >= photosArray.length - 10;
@@ -129,6 +131,7 @@ function showTenCards() {
 }
 
 function makeShowMoreButton(viewedArray) {
+  get('.more-less-container').innerHTML = '';
   if (viewedArray.length > 10) {
     const button = document.createElement('button');
     button.classList.add('more-button');
