@@ -22,15 +22,15 @@ get('.add-to-album').addEventListener('click', (event) => {
 });
 
 get('.photo-area').addEventListener('click', (event) => {
-  if (event.target.closest('.photo-card') !== null) {
-    event.target.onblur = event => saveEdits(event);
-  }
   if (event.target.classList.contains('delete-button')) {
     deletePhotoCard(event);
   }
   if (event.target.classList.contains('favorite-button')) {
     favoritePhotoCard(event);
     }
+  if (event.target.closest('.photo-card') !== null) {
+    event.target.onblur = event => saveEdits(event);
+  }
 });
 
 get('.photo-area').addEventListener('keydown', (event) => {
@@ -41,8 +41,8 @@ get('.photo-area').addEventListener('keydown', (event) => {
 })
 
 function saveEdits(event) {
-  const id = event.target.closest('.photo-card').dataset.id;
-  const index = getIndex(id);
+  const index = getIndex(event);
+  const id = photosArray[index].id;
   const title = get(`.photo-card[data-id="${id}"] .photo-title`).innerText;
   const caption = get(`.photo-card[data-id="${id}"] .photo-caption`).innerText;
   photosArray[index].updatePhoto(photosArray, index, title, caption);
@@ -83,22 +83,21 @@ function loadLocalStorage() {
 }
 
 function deletePhotoCard(event) {
-  const id = parseInt(event.target.closest('.photo-card').dataset.id);
-  const index = getIndex(id);
+  const index = getIndex(event);
   photosArray[index].deleteFromStorage(photosArray, index);
   event.target.closest('.photo-card').remove();
 }
 
 function favoritePhotoCard(event) {
-  const id = event.target.closest('.photo-card').dataset.id;
-  const index = getIndex(id);
-  const newFavStatus = !photosArray[index].favorite;
-  photosArray[index].updateFavorite(photosArray, newFavStatus);
+  const index = getIndex(event);
+  const newFavStatus = !photosArray[index].favorite
+  photosArray[index].favorite = newFavStatus;
   event.target.classList.replace(`favorite-${!newFavStatus}`,
     `favorite-${newFavStatus}`);
-  event.target.blur();
+  saveEdits(event);
 }
 
-function getIndex(id) {
+function getIndex(event) {
+  const id = parseInt(event.target.closest('.photo-card').dataset.id);
   return photosArray.findIndex(photo => photo.id === parseInt(id));
 }

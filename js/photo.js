@@ -24,9 +24,4 @@ class Photo {
     photosArray[index].caption = caption;
     this.saveToStorage(photosArray);
   }
-
-  updateFavorite(photosArray, isFavorite) {
-    this.favorite = isFavorite;
-    this.saveToStorage(photosArray);
-  }
 }
