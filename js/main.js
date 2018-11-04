@@ -1,4 +1,5 @@
 let photosArray = [];
+let favCount = 0;
 
 function generateCards() {
   for (var i = 0; i < 30; i++) {
@@ -22,10 +23,23 @@ window.onload = () => {
 
 get('.more-less-container').addEventListener('click', (event) => {
   event.preventDefault();
+  const viewedArray = determineViewedArray();
   if (event.target.classList.contains('more-button')) {
-    showMore();
+    showMore(event, viewedArray);
   } else if (event.target.classList.contains('less-button')) {
-    showTen();
+    showTen(viewedArray);
+  }
+});
+
+get('.fav-and-add').addEventListener('click', (event) => {
+  event.preventDefault();
+  if (event.target.classList.contains('favorites')) {
+    showFavorites(event);
+  } else if (event.target.classList.contains('view-all')) {
+    showTen(photosArray);
+    event.target.innerHTML = 'View <span class="num-favs">0</span> Favorites';
+    event.target.classList.replace('view-all', 'favorites');
+    get('.num-favs').innerText = favCount;
   }
 });
 
@@ -61,6 +75,22 @@ get('.photo-area').addEventListener('keydown', (event) => {
     saveEdits(event);
   }
 });
+
+function determineViewedArray() {
+  if (get('.favorites') === null) {
+    return photosArray.filter(photo => photo.favorite === true);
+  }
+  return photosArray;
+}
+  
+
+function showFavorites(event) {
+  removeCardsFromDOM();
+  const favorites = photosArray.filter(photo => photo.favorite === true);
+  showTen(favorites);
+  event.target.innerHTML = 'View All Photos';
+  event.target.classList.replace('favorites', 'view-all');
+}
 
 function checkForm() {
   if (get('#title').value !== '' && get('#caption').value !== '' &&
@@ -118,16 +148,16 @@ function loadLocalStorage() {
     return photo = new Photo(photo.id, photo.title, photo.caption, photo.file,
       photo.favorite);
   });
-  showTen();
+  showTen(photosArray);
 }
 
-function showTen() {
+function showTen(viewedArray) {
   removeCardsFromDOM();
-  const tenMostRecent = photosArray.filter((photo, index) => {
-    return index >= photosArray.length - 10;
+  const tenMostRecent = viewedArray.filter((photo, index) => {
+    return index >= viewedArray.length - 10;
   })
   tenMostRecent.forEach(photo => addToDOM(photo));
-  makeShowMoreButton(photosArray);
+  makeShowMoreButton(viewedArray);
 }
 
 function makeShowMoreButton(viewedArray) {
@@ -140,11 +170,11 @@ function makeShowMoreButton(viewedArray) {
   }
 }
 
-function showMore() {
+function showMore(event, viewedArray) {
   removeCardsFromDOM();
-  photosArray.forEach(photo => addToDOM(photo));
-  get('.more-button').classList.replace('more-button', 'less-button');
-  get('.less-button').innerText = 'Show Less';
+  viewedArray.forEach(photo => addToDOM(photo));
+  event.target.innerText = 'Show Less';
+  event.target.classList.replace('more-button', 'less-button');
 }
 
 function removeCardsFromDOM() {
@@ -152,13 +182,14 @@ function removeCardsFromDOM() {
 }
 
 function updateFavoriteCounter(isIncrement) {
-  let numFavs = parseInt(get('.num-favs').innerText);
   if (isIncrement) {
-    numFavs++;
+    favCount++;
   } else {
-    numFavs--;
+    favCount--;
   }
-  get('.num-favs').innerText = numFavs;
+  if (get('.num-favs') !== null) {
+    get('.num-favs').innerText = favCount;
+  }
 }
 
 function deletePhotoCard(event) {
