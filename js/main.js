@@ -18,7 +18,7 @@ window.onload = () => {
     giveIndicationToAddPhotos();
   }
   get('.add-to-album').disabled = true;
-}
+};
 
 get('.add-to-album').addEventListener('click', (event) => {
   event.preventDefault();
@@ -70,6 +70,16 @@ get('.photo-area').addEventListener('keydown', (event) => {
     event.target.closest('.photo-card') !== null) {
     saveEdits(event);
   }
+});
+
+get('#search').addEventListener('keyup', (event) => {
+  const viewedArray = determineViewedArray();
+  searchCards(viewedArray, event.target.value);
+});
+
+get('.search-button').addEventListener('click', (event) => {
+  const viewedArray = determineViewedArray();
+  searchCards(viewedArray, get('#search').value);
 });
 
 function addToDOM(photo) {
@@ -212,6 +222,18 @@ function saveEdits(event) {
   const caption = get(`.photo-card[data-id="${id}"] .photo-caption`).innerText;
   photosArray[index].updatePhoto(photosArray, index, title, caption);
   event.target.blur();
+}
+
+function searchCards(viewedArray, searchedTerm) {
+  removeCardsFromDOM();
+  viewedArray.forEach(photo => addToDOM(photo));
+  document.querySelectorAll('.photo-card').forEach(card => {
+    if (!card.innerText.includes(searchedTerm)) {
+      card.remove();
+    }
+  });
+  searchedTerm === '' && showTen(viewedArray);
+  get('.more-less-container').innerHTML = '';
 }
 
 function showFavorites(event) {
