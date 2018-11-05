@@ -1,5 +1,4 @@
 let photosArray = [];
-let favCount = 0;
 
 function generateCards() {
   for (var i = 0; i < 30; i++) {
@@ -37,7 +36,7 @@ get('.fav-and-add').addEventListener('click', (event) => {
     showTen(photosArray);
     event.target.innerHTML = 'View <span class="num-favs">0</span> Favorites';
     event.target.classList.replace('view-all', 'favorites');
-    get('.num-favs').innerText = favCount;
+    updateFavoriteCounter();
   }
 });
 
@@ -130,6 +129,7 @@ function deletePhotoCard(event) {
   if (photosArray.length === 0) {
     giveIndicationToAddPhotos();
   }
+  updateFavoriteCounter();
 }
 
 function determineViewedArray() {
@@ -145,7 +145,7 @@ function favoritePhotoCard(event) {
   photosArray[index].favorite = newFavStatus;
   event.target.classList.replace(`favorite-${!newFavStatus}`,
     `favorite-${newFavStatus}`);
-  updateFavoriteCounter(newFavStatus);
+  updateFavoriteCounter();
   saveEdits(event);
 }
 
@@ -186,11 +186,11 @@ function loadLocalStorage() {
   photosArray = JSON.parse(localStorage.getItem('photos'));
   photosArray.forEach(photo => addToDOM(photo));
   photosArray = photosArray.map(photo => {
-    photo.favorite && updateFavoriteCounter(true);
     return photo = new Photo(photo.id, photo.title, photo.caption, photo.file,
       photo.favorite);
   });
   showTen(photosArray);
+  updateFavoriteCounter();
 }
 
 function makeNewPhoto() {
@@ -199,6 +199,20 @@ function makeNewPhoto() {
   const caption = get('#caption').value;
   const file = URL.createObjectURL(get('#choose-file').files[0]);
   return new Photo(id, title, caption, file);
+
+  // const reader = new FileReader();
+  // reader.addEventListener('loadend', (event) => {
+  //   const id = getNextID();
+  //   const title = get('#title').value;
+  //   console.log(title);
+  //   const caption = get('#caption').value;
+  //   const file = reader.result;
+  //   var photo = new Photo(id, title, caption, file);
+  //   console.log(photo);
+  //   photo.saveToStorage(photosArray, true);
+  //   addToDOM(photo);
+  // });
+  // reader.readAsDataURL(get('#choose-file').files[0]);
 }
 
 function makeShowMoreButton(moreExist) {
@@ -260,12 +274,8 @@ function showTen(viewedArray) {
   makeShowMoreButton(viewedArray.length > 10);
 }
 
-function updateFavoriteCounter(isIncrement) {
-  if (isIncrement) {
-    favCount++;
-  } else {
-    favCount--;
-  }
+function updateFavoriteCounter() {
+  const favCount = photosArray.filter(photo => photo.favorite === true).length;
   if (get('.num-favs') !== null) {
     get('.num-favs').innerText = favCount;
   }
