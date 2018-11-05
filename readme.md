@@ -8,10 +8,10 @@
   ![screenshot of original Foto Finder](images/fotofinder-desktop-original.png)
 
   My Version:
-  ![screenshot of my version](images/fotofinder-mobile-original.png)
+  ![screenshot of my version](images/)
 
   Original Mobile Comp:
-  ![screenshot of original mobile Foto Finder](images/)
+  ![screenshot of original mobile Foto Finder](images/fotofinder-mobile-original.png)
 
   My Version:
   ![screenshot of my mobile version](images/)
