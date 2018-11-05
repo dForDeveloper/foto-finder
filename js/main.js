@@ -170,7 +170,9 @@ function giveIndicationToAddPhotos() {
   newCard.innerHTML =
    `<h4 class="photo-title">Add Your Own Photos</h4>
     <figure class="placeholder-image photo-container"></figure>
-    <p class="photo-caption">add your own photo to the album to remove this placeholder</p>
+    <p class="photo-caption">
+      add your own photo to the album to remove this placeholder
+    </p>
     <footer class="photo-card-footer">
       <button class="fake-delete"></button>
       <button class="fake-favorite"></button>
