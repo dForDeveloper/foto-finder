@@ -21,11 +21,9 @@ window.onload = () => {
 
 get('.add-to-album').addEventListener('click', (event) => {
   event.preventDefault();
-  const photo = makeNewPhoto();
-  photo.saveToStorage(photosArray, true);
-  clearInput();
-  checkNumCardsDisplayed();
-  addToDOM(photo);
+  const reader = new FileReader();
+  reader.readAsDataURL(get('#choose-file').files[0]);
+  reader.onload = makeNewPhoto;
 });
 
 get('.fav-and-add').addEventListener('click', (event) => {
@@ -193,26 +191,16 @@ function loadLocalStorage() {
   updateFavoriteCounter();
 }
 
-function makeNewPhoto() {
+function makeNewPhoto(event) {
   const id = getNextID();
   const title = get('#title').value;
   const caption = get('#caption').value;
-  const file = URL.createObjectURL(get('#choose-file').files[0]);
-  return new Photo(id, title, caption, file);
-
-  // const reader = new FileReader();
-  // reader.addEventListener('loadend', (event) => {
-  //   const id = getNextID();
-  //   const title = get('#title').value;
-  //   console.log(title);
-  //   const caption = get('#caption').value;
-  //   const file = reader.result;
-  //   var photo = new Photo(id, title, caption, file);
-  //   console.log(photo);
-  //   photo.saveToStorage(photosArray, true);
-  //   addToDOM(photo);
-  // });
-  // reader.readAsDataURL(get('#choose-file').files[0]);
+  const file = event.target.result;
+  const photo = new Photo(id, title, caption, file);
+  photo.saveToStorage(photosArray, true);
+  clearInput();
+  checkNumCardsDisplayed();
+  addToDOM(photo);
 }
 
 function makeShowMoreButton(moreExist) {
