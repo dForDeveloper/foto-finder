@@ -100,7 +100,7 @@ form .button:hover,
   filter: brightness(1.2);
 }
 
-form #choose-file {
+input[type="file"] {
   height: 0.1px;
   opacity: 0;
   overflow: hidden;

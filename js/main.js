@@ -1,4 +1,5 @@
 let photosArray = [];
+const reader = new FileReader();
 
 function generateCards() {
   for (var i = 0; i < 30; i++) {
@@ -21,9 +22,8 @@ window.onload = () => {
 
 get('.add-to-album').addEventListener('click', (event) => {
   event.preventDefault();
-  const reader = new FileReader();
   reader.readAsDataURL(get('#choose-file').files[0]);
-  reader.onload = makeNewPhoto;
+  reader.onload = (event) => makeNewPhoto(event);
 });
 
 get('.fav-and-add').addEventListener('click', (event) => {
@@ -38,7 +38,7 @@ get('.fav-and-add').addEventListener('click', (event) => {
   }
 });
 
-get('form').addEventListener('change', checkForm);
+get('form').addEventListener('input', checkForm);
 
 get('.more-less-container').addEventListener('click', (event) => {
   event.preventDefault();
@@ -50,15 +50,20 @@ get('.more-less-container').addEventListener('click', (event) => {
   }
 });
 
-get('.photo-area').addEventListener('click', (event) => {
-  if (event.target.classList.contains('delete-button')) {
-    deletePhotoCard(event);
+get('.photo-area').addEventListener('change', (event) => {
+  const id = event.target.closest('.photo-card').dataset.id;
+  const index = getIndex(event);
+  reader.readAsDataURL(get(`#edit-file-${id}`).files[0]);
+  reader.onload = (event) => {
+    editPhoto(event, index, id);
   }
-  if (event.target.classList.contains('favorite-button')) {
-    favoritePhotoCard(event);
-    }
+});
+
+get('.photo-area').addEventListener('click', (event) => {
+  deletePhotoCard(event);
+  favoritePhotoCard(event);
   if (event.target.closest('.photo-card') !== null) {
-    event.target.onblur = event => saveEdits(event);
+    event.target.onblur = (event) => saveEdits(event);
   }
 });
 
@@ -83,9 +88,11 @@ function addToDOM(photo) {
   const newCard = document.createElement('article');
   newCard.dataset.id = photo.id;
   newCard.classList.add('photo-card');
-  newCard.innerHTML =
-   `<h4 class="photo-title" contenteditable="true">${photo.title}</h4>
-    <figure class="photo-image-${photo.id} photo-container"></figure>
+  newCard.innerHTML = `
+    <h4 class="photo-title" contenteditable="true">${photo.title}</h4>
+    <label for="edit-file-${photo.id}"
+      class="photo-image-${photo.id} photo-container"></label>
+    <input type="file" id="edit-file-${photo.id}" accept="image/*">
     <p class="photo-caption" contenteditable="true">${photo.caption}</p>
     <footer class="photo-card-footer">
       <button class="delete-button"></button>
@@ -121,13 +128,15 @@ function clearInput() {
 }
 
 function deletePhotoCard(event) {
-  const index = getIndex(event);
-  photosArray[index].deleteFromStorage(photosArray, index);
-  event.target.closest('.photo-card').remove();
-  if (photosArray.length === 0) {
-    giveIndicationToAddPhotos();
+  if (event.target.classList.contains('delete-button')) {
+    const index = getIndex(event);
+    photosArray[index].deleteFromStorage(photosArray, index);
+    event.target.closest('.photo-card').remove();
+    if (photosArray.length === 0) {
+      giveIndicationToAddPhotos();
+    }
+    updateFavoriteCounter();
   }
-  updateFavoriteCounter();
 }
 
 function determineViewedArray() {
@@ -137,14 +146,22 @@ function determineViewedArray() {
   return photosArray;
 }
 
+function editPhoto(event, index, id) {
+  const newFile = event.target.result;
+  photosArray[index].updateImage(photosArray, index, newFile);
+  get(`.photo-image-${id}`).style.backgroundImage = `url(${newFile})`;
+}
+
 function favoritePhotoCard(event) {
-  const index = getIndex(event);
-  const newFavStatus = !photosArray[index].favorite
-  photosArray[index].favorite = newFavStatus;
-  event.target.classList.replace(`favorite-${!newFavStatus}`,
-    `favorite-${newFavStatus}`);
-  updateFavoriteCounter();
-  saveEdits(event);
+  if (event.target.classList.contains('favorite-button')) {
+    const index = getIndex(event);
+    const newFavStatus = !photosArray[index].favorite
+    photosArray[index].favorite = newFavStatus;
+    event.target.classList.replace(`favorite-${!newFavStatus}`,
+      `favorite-${newFavStatus}`);
+    updateFavoriteCounter();
+    saveEdits(event);
+  }
 }
 
 function get(elem) {
@@ -155,7 +172,7 @@ function getIndex(event) {
   const id = parseInt(event.target.closest('.photo-card').dataset.id);
   return photosArray.findIndex(photo => photo.id === parseInt(id));
 }
-  
+
 function getNextID() {
   if (photosArray[0] !== undefined) {
     return photosArray[photosArray.length - 1].id + 1;

@@ -24,4 +24,9 @@ class Photo {
     photosArray[index].caption = caption;
     this.saveToStorage(photosArray);
   }
+
+  updateImage(photosArray, index, file) {
+    photosArray[index].file = file;
+    this.saveToStorage(photosArray);
+  }
 }
