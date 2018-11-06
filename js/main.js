@@ -109,12 +109,20 @@ function addToDOM(photo, isAnimated) {
   get(`.photo-image-${photo.id}`).style.backgroundImage = `url(${photo.file})`;
 }
 
-function animateFavorite(card, photo) {
+function animateFavoriteCard(card, photo) {
   if (photo.favorite === true) {
     card.classList.add('glow')
   } else {
     card.classList.remove('appear');
     card.classList.remove('glow');
+  }
+}
+
+function animateHeart(heart, photo) {
+  if (photo.favorite === true) {
+    heart.classList.add('throb');
+  } else {
+    heart.classList.remove('throb');
   }
 }
 
@@ -132,7 +140,8 @@ function checkNumCardsDisplayed() {
     document.querySelectorAll('.photo-card')[9].remove();
     makeShowMoreButton(true);
   } else if (get('.indication') !== null) {
-      get('.indication').remove();
+      get('.indication').classList.add('disappear');
+      setTimeout(() => get('.indication').remove(), 500);
   }
 }
 
@@ -148,7 +157,7 @@ function deletePhotoCard(event) {
   photosArray[index].deleteFromStorage(photosArray, index);
   event.target.closest('.photo-card').classList.add('disappear');
   setTimeout(() => event.target.closest('.photo-card').remove(), 500);
-  photosArray.length === 0 && setTimeout(() => indicationToAddPhotos(), 500);
+  photosArray.length === 0 && setTimeout(() => indicationToAddPhotos(), 600);
   updateFavoriteCounter();
 }
 
@@ -170,7 +179,8 @@ function favoritePhotoCard(event) {
   photosArray[index].favorite = !photosArray[index].favorite;
   event.target.classList.replace(`favorite-${!photosArray[index].favorite}`,
     `favorite-${photosArray[index].favorite}`);
-  animateFavorite(event.target.closest('.photo-card'), photosArray[index]);
+  animateFavoriteCard(event.target.closest('.photo-card'), photosArray[index]);
+  animateHeart(event.target, photosArray[index]);
   updateFavoriteCounter();
   saveEdits(event);
 }
