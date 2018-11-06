@@ -64,6 +64,10 @@ form {
   width: 720px;
 }
 
+form input[type="text"] {
+  padding-left: 5px;
+}
+
 form .full-width {
   width: 100%;
 }
