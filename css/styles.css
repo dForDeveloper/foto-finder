@@ -106,6 +106,10 @@ form .button:hover,
   filter: brightness(1.2);
 }
 
+button:focus {
+  outline: 0;
+}
+
 input[type="file"] {
   height: 0.1px;
   opacity: 0;
@@ -237,6 +241,10 @@ form .add-to-album:disabled {
   animation: disappear 500ms ease-in-out 0s 1 normal forwards;
 }
 
+.throb {
+  animation: throb 250ms ease-in-out 0s 2 alternate forwards;
+}
+
 @keyframes appear {
   0% {
     transform: scale(0);
@@ -262,6 +270,16 @@ form .add-to-album:disabled {
 
   100% {
     filter: brightness(1.5);
+  }
+}
+
+@keyframes throb {
+  0% {
+    transform: scale(1);
+  }
+
+  100% {
+    transform: scale(1.3);
   }
 }
 
