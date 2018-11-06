@@ -62,15 +62,17 @@ get('.photo-area').addEventListener('change', (event) => {
 get('.photo-area').addEventListener('click', (event) => {
   deletePhotoCard(event);
   favoritePhotoCard(event);
+});
+
+get('.photo-area').addEventListener('focusin', (event) => {
   if (event.target.closest('.photo-card') !== null) {
     event.target.onblur = (event) => saveEdits(event);
   }
 });
 
 get('.photo-area').addEventListener('keydown', (event) => {
-  if(event.key === 'Enter' || event.key === 'Tab' &&
-    event.target.closest('.photo-card') !== null) {
-    saveEdits(event);
+  if(event.key === 'Enter') {
+    event.target.blur();
   }
 });
 
@@ -242,7 +244,6 @@ function saveEdits(event) {
   const title = get(`.photo-card[data-id="${id}"] .photo-title`).innerText;
   const caption = get(`.photo-card[data-id="${id}"] .photo-caption`).innerText;
   photosArray[index].updatePhoto(photosArray, index, title, caption);
-  event.target.blur();
 }
 
 function searchCards(viewedArray, searchedTerm) {
