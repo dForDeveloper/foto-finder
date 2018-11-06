@@ -15,7 +15,7 @@ window.onload = () => {
       localStorage.getItem('photos') !== '[]') {
     loadLocalStorage();
   } else {
-    giveIndicationToAddPhotos();
+    indicationToAddPhotos();
   }
   get('.add-to-album').disabled = true;
 };
@@ -60,8 +60,11 @@ get('.photo-area').addEventListener('change', (event) => {
 });
 
 get('.photo-area').addEventListener('click', (event) => {
-  deletePhotoCard(event);
-  favoritePhotoCard(event);
+  if (event.target.classList.contains('delete-button')) {
+    deletePhotoCard(event);
+  } else if (event.target.classList.contains('favorite-button')) {
+    favoritePhotoCard(event);
+  }
 });
 
 get('.photo-area').addEventListener('focusin', (event) => {
@@ -141,14 +144,12 @@ function clearInput() {
 }
 
 function deletePhotoCard(event) {
-  if (event.target.classList.contains('delete-button')) {
-    const index = getIndex(event);
-    photosArray[index].deleteFromStorage(photosArray, index);
-    event.target.closest('.photo-card').classList.add('disappear');
-    setTimeout(() => event.target.closest('.photo-card').remove(), 500);
-    photosArray.length === 0 && giveIndicationToAddPhotos();
-    updateFavoriteCounter();
-  }
+  const index = getIndex(event);
+  photosArray[index].deleteFromStorage(photosArray, index);
+  event.target.closest('.photo-card').classList.add('disappear');
+  setTimeout(() => event.target.closest('.photo-card').remove(), 500);
+  photosArray.length === 0 && setTimeout(() => indicationToAddPhotos(), 500);
+  updateFavoriteCounter();
 }
 
 function determineViewedArray() {
@@ -165,15 +166,13 @@ function editPhoto(event, index, id) {
 }
 
 function favoritePhotoCard(event) {
-  if (event.target.classList.contains('favorite-button')) {
-    const index = getIndex(event);
-    photosArray[index].favorite = !photosArray[index].favorite;
-    event.target.classList.replace(`favorite-${!photosArray[index].favorite}`,
-      `favorite-${photosArray[index].favorite}`);
-    animateFavorite(event.target.closest('.photo-card'), photosArray[index]);
-    updateFavoriteCounter();
-    saveEdits(event);
-  }
+  const index = getIndex(event);
+  photosArray[index].favorite = !photosArray[index].favorite;
+  event.target.classList.replace(`favorite-${!photosArray[index].favorite}`,
+    `favorite-${photosArray[index].favorite}`);
+  animateFavorite(event.target.closest('.photo-card'), photosArray[index]);
+  updateFavoriteCounter();
+  saveEdits(event);
 }
 
 function get(elem) {
@@ -192,7 +191,7 @@ function getNextID() {
   return 0;
 }
 
-function giveIndicationToAddPhotos() {
+function indicationToAddPhotos() {
   const newCard = document.createElement('article');
   newCard.classList.add('indication');
   newCard.classList.add('photo-card');
