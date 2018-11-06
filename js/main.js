@@ -65,7 +65,8 @@ get('.photo-area').addEventListener('click', (event) => {
 });
 
 get('.photo-area').addEventListener('focusin', (event) => {
-  if (event.target.closest('.photo-card') !== null) {
+  if (event.target.closest('.photo-card') !== null &&
+    !event.target.classList.contains('delete-button')) {
     event.target.onblur = (event) => saveEdits(event);
   }
 });
@@ -86,10 +87,11 @@ get('.search-button').addEventListener('click', (event) => {
   searchCards(viewedArray, get('#search').value);
 });
 
-function addToDOM(photo) {
+function addToDOM(photo, isAnimated) {
   const newCard = document.createElement('article');
   newCard.dataset.id = photo.id;
   newCard.classList.add('photo-card');
+  isAnimated && newCard.classList.add('appear');
   newCard.innerHTML = `
     <h4 class="photo-title" contenteditable="true">${photo.title}</h4>
     <label for="edit-file-${photo.id}"
@@ -102,6 +104,15 @@ function addToDOM(photo) {
     </footer>`;
   get('.photo-area').prepend(newCard);
   get(`.photo-image-${photo.id}`).style.backgroundImage = `url(${photo.file})`;
+}
+
+function animateFavorite(card, photo) {
+  if (photo.favorite === true) {
+    card.classList.add('glow')
+  } else {
+    card.classList.remove('appear');
+    card.classList.remove('glow');
+  }
 }
 
 function checkForm() {
@@ -133,10 +144,9 @@ function deletePhotoCard(event) {
   if (event.target.classList.contains('delete-button')) {
     const index = getIndex(event);
     photosArray[index].deleteFromStorage(photosArray, index);
-    event.target.closest('.photo-card').remove();
-    if (photosArray.length === 0) {
-      giveIndicationToAddPhotos();
-    }
+    event.target.closest('.photo-card').classList.add('disappear');
+    setTimeout(() => event.target.closest('.photo-card').remove(), 500);
+    photosArray.length === 0 && giveIndicationToAddPhotos();
     updateFavoriteCounter();
   }
 }
@@ -157,10 +167,10 @@ function editPhoto(event, index, id) {
 function favoritePhotoCard(event) {
   if (event.target.classList.contains('favorite-button')) {
     const index = getIndex(event);
-    const newFavStatus = !photosArray[index].favorite
-    photosArray[index].favorite = newFavStatus;
-    event.target.classList.replace(`favorite-${!newFavStatus}`,
-      `favorite-${newFavStatus}`);
+    photosArray[index].favorite = !photosArray[index].favorite;
+    event.target.classList.replace(`favorite-${!photosArray[index].favorite}`,
+      `favorite-${photosArray[index].favorite}`);
+    animateFavorite(event.target.closest('.photo-card'), photosArray[index]);
     updateFavoriteCounter();
     saveEdits(event);
   }
@@ -221,7 +231,7 @@ function makeNewPhoto(event) {
   photo.saveToStorage(photosArray, true);
   clearInput();
   checkNumCardsDisplayed();
-  addToDOM(photo);
+  addToDOM(photo, true);
 }
 
 function makeShowMoreButton(moreExist) {

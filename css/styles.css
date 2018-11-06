@@ -14,6 +14,7 @@ body .dark-background {
   background-color: #3e2a35;
 }
 
+/*Header Styles*/
 header {
   align-items: center;
   display: grid;
@@ -56,6 +57,7 @@ header .search-button {
   width: 1.875rem;
 }
 
+/*Form Styles*/
 form {
   margin: auto;
   padding: 15px 30px 30px;
@@ -122,6 +124,7 @@ form .add-to-album:disabled {
   filter: grayscale(1);
 }
 
+/*Bottom Section*/
 .photo-area {
   color: #3e2a35;
   display: grid;
@@ -131,6 +134,7 @@ form .add-to-album:disabled {
   padding: 30px;
 }
 
+/*Card Styles*/
 .photo-card {
   border: 2px solid #938284;
   display: grid;
@@ -216,6 +220,48 @@ form .add-to-album:disabled {
   width: 45%;
 }
 
+/*Animations*/
+.appear {
+  animation: appear 500ms ease-in-out 0s 1 normal forwards;
+}
+
+.glow {
+  animation: glow 250ms ease-in-out 0s 2 alternate forwards;
+}
+
+.disappear {
+  animation: disappear 500ms ease-in-out 0s 1 normal forwards;
+}
+
+@keyframes appear {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes disappear {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0);
+  }
+}
+
+@keyframes glow {
+  0% {
+    filter: brightness(1);
+  }
+
+  100% {
+    filter: brightness(1.5);
+  }
+}
+
+/*Media Queries*/
 @media screen and (max-width: 1350px){
   .photo-area {
     grid-template-columns: repeat(3, 1fr);
