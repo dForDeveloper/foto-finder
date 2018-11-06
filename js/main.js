@@ -260,7 +260,7 @@ function searchCards(viewedArray, searchedTerm) {
   removeCardsFromDOM();
   viewedArray.forEach(photo => addToDOM(photo));
   document.querySelectorAll('.photo-card').forEach(card => {
-    if (!card.innerText.includes(searchedTerm)) {
+    if (!card.innerText.toLowerCase().includes(searchedTerm.toLowerCase())) {
       card.remove();
     }
   });
