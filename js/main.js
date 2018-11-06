@@ -254,8 +254,8 @@ function searchCards(viewedArray, searchedTerm) {
       card.remove();
     }
   });
-  searchedTerm === '' && showTen(viewedArray);
   get('.more-less-container').innerHTML = '';
+  searchedTerm === '' && showTen(viewedArray);
 }
 
 function showFavorites(event) {
